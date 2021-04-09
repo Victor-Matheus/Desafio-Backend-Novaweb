@@ -9,6 +9,6 @@ namespace contacts.Data
         {
         }
         
-        DbSet<Models.Contact> Contacts { get; set; }
+        public DbSet<Models.Contact> Contacts { get; set; }
     }
 }
