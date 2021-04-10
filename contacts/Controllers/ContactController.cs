@@ -15,7 +15,7 @@ namespace contacts.Controllers
     [Route("v1/contacts")]
     public class ContactController : ControllerBase
     {
-        private readonly Repositories.Contracts.IContactRepository _contactRepository;
+        private readonly Repositories.ContactRepository _contactRepository;
 
         [HttpGet]
         [Route("")]
