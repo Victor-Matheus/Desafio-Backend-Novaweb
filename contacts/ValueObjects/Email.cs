@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using contacts.ValueObjects.Contracts;
 using Flunt.Validations;
 

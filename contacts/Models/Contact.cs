@@ -8,7 +8,7 @@ namespace contacts.Models
     public class Contact
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         /*
             Use of Value Objects, avoiding excess of primitive types and
@@ -18,7 +18,18 @@ namespace contacts.Models
         public Email Email { get; set; }
         
         // List<T> implementation: List -> IList -> ICollection -> IEnumerable
-        public IList<PhoneNumber> PhoneNumber { get; set; }
+        public IList<PhoneNumber> PhoneNumbers { get; set; }
+
+
+        public Contact(Name name, Email email, IList<PhoneNumber> phoneNumbers){
+            this.Name = name;
+            this.Email = email;
+            this.PhoneNumbers = phoneNumbers;
+        }
+
+        public void AddPhoneNumber(PhoneNumber _phoneNumber){
+            PhoneNumbers.Add(_phoneNumber);
+        }
 
     }
 }

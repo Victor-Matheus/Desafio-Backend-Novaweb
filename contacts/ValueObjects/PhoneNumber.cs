@@ -8,6 +8,7 @@ namespace contacts.ValueObjects
         public PhoneNumber(string number)
         {
             Number = number;
+            Validate();
         }
 
         public string Number { get; private set; }
