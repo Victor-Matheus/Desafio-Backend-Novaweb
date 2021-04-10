@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using contacts.ValueObjects.Contracts;
 using Flunt.Validations;
 
@@ -11,6 +10,8 @@ namespace contacts.ValueObjects
             Address = address;
             Validate();
         }
+
+        // public Email(){}
         public string Address { get; private set; }
 
         public void Validate()

@@ -12,6 +12,8 @@ namespace contacts.ValueObjects
             Validate();
         }
 
+        // public Name(){}
+
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
 

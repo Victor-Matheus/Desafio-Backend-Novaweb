@@ -11,6 +11,8 @@ namespace contacts.ValueObjects
             Validate();
         }
 
+        // public PhoneNumber(){}
+
         public string Number { get; private set; }
 
         public void Validate()

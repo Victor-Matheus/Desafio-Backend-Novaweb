@@ -21,10 +21,12 @@ namespace contacts.Models
         public IList<PhoneNumber> PhoneNumbers { get; set; }
 
 
+        public Contact(){}
+
         public Contact(Name name, Email email, IList<PhoneNumber> phoneNumbers){
             this.Name = name;
             this.Email = email;
-            this.PhoneNumbers = phoneNumbers;
+            PhoneNumbers = phoneNumbers == null ? new List<PhoneNumber>() : phoneNumbers;
         }
 
         public void AddPhoneNumber(PhoneNumber _phoneNumber){

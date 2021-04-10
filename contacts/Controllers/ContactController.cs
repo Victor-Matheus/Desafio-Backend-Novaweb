@@ -1,21 +1,19 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using contacts.Enums;
 using contacts.Repositories;
+using contacts.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace contacts.Controllers
 {
-
 
     [ApiController]
     [Route("v1/contacts")]
     public class ContactController : ControllerBase
     {
-        private readonly Repositories.ContactRepository _contactRepository;
+        private ContactRepository _contactRepository = new ContactRepository();
 
         [HttpGet]
         [Route("")]
@@ -31,7 +29,8 @@ namespace contacts.Controllers
                     contacts
                 );
 
-            }catch
+            }
+            catch
             {
                 return new ControllerResponse(
                     HttpStatusCode.InternalServerError,
@@ -49,24 +48,29 @@ namespace contacts.Controllers
         [Route("")]
         public async Task<ControllerResponse> CreateContact(
             [FromServices] Data.DataContext context,
-            [FromBody] Models.Contact model
+            [FromBody] Models.ContactRequestModel model
         )
         {
-            var name = new ValueObjects.Name(model.Name.FirstName, model.Name.LastName);
-            var email = new ValueObjects.Email(model.Email.Address);
-            var numbers = model.PhoneNumbers;
-            foreach(var num in numbers)
+            IList<PhoneNumber> numbers = new List<PhoneNumber>();
+            var name = new ValueObjects.Name(model.FirstName, model.LastName);
+            var email = new ValueObjects.Email(model.EmailAddress);
+            var _numbers = model.PhoneNumbers;
+
+            if (_numbers != null)
             {
-                var elem = new ValueObjects.PhoneNumber(num.Number);
+                foreach (var num in _numbers)
+                {
+                    var elem = new ValueObjects.PhoneNumber(num);
 
-                if(elem.Invalid) return new ControllerResponse(
-                    HttpStatusCode.BadRequest,
-                    false,
-                    "Invalid phone number",
-                    model
-                );
+                    if (elem.Invalid) return new ControllerResponse(
+                         HttpStatusCode.BadRequest,
+                         false,
+                         "Invalid phone number",
+                         model
+                     );
 
-                numbers.Add(elem);
+                    numbers.Add(elem);
+                }
             }
 
             IList<dynamic> notifications = new List<dynamic>();
@@ -74,18 +78,19 @@ namespace contacts.Controllers
             notifications.Add(name.Notifications);
             notifications.Add(email.Notifications);
 
-            if(name.Invalid || email.Invalid) return new ControllerResponse(
-                HttpStatusCode.BadRequest,
-                false,
-                "Inavalid name or email",
-                notifications
-            );
+            if (name.Invalid || email.Invalid) return new ControllerResponse(
+                 HttpStatusCode.BadRequest,
+                 false,
+                 "Inavalid name or email",
+                 notifications
+             );
 
             var contact = new Models.Contact(name, email, numbers);
+            context.Contacts.Add(contact);
 
             var res = await _contactRepository._createContact(context);
 
-            if(res == EDbStatusReturn.DB_SAVED_OK)
+            if (res == EDbStatusReturn.DB_SAVED_OK)
             {
                 return new ControllerResponse(
                     HttpStatusCode.OK,
