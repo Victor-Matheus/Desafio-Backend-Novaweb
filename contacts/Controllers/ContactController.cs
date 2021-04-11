@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using contacts.Enums;
@@ -22,11 +23,32 @@ namespace contacts.Controllers
             try
             {
                 var contacts = await _contactRepository._getAllContacts(context);
+
+                List<dynamic> objects = new List<dynamic>();
+
+                foreach (var contact in contacts.Value)
+                {
+                    var _aux = new
+                    {
+                        id = contact.Id,
+                        Name = new
+                        {
+                            firstName = contact.Name.FirstName,
+                            lastName = contact.Name.LastName
+                        },
+                        Email = contact.Email.Address,
+                        PhoneNumbers = contact.PhoneNumbers.Select(x => new {number = x.Number})
+                    };
+
+                    objects.Add(_aux);
+                }
+                
                 return new ControllerResponse(
                     HttpStatusCode.OK,
                     true,
                     "",
-                    contacts
+                    objects
+
                 );
 
             }

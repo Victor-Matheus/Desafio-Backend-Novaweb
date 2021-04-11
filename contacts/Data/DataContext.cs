@@ -20,11 +20,6 @@ namespace contacts.Data
             #region 
             modelBuilder.Entity<Models.Contact>().ToTable("contacts");
             modelBuilder.Entity<Models.Contact>().HasKey(x => x.Id);
-            // modelBuilder.Entity<Models.Contact>().OwnsOne(x => x.Name).Property(z => z.FirstName).HasColumnName("first_name");
-            // modelBuilder.Entity<Models.Contact>().OwnsOne(x => x.Name).Property(z => z.LastName).HasColumnName("last_name");
-            // modelBuilder.Entity<Models.Contact>().OwnsOne(x => x.Name).Ignore(z => z.Notifications);
-            // modelBuilder.Entity<Models.Contact>().OwnsOne(x => x.Name).Ignore(z => z.Invalid);
-            // modelBuilder.Entity<Models.Contact>().OwnsOne(x => x.Name).Ignore(z => z.Valid);
             modelBuilder.Entity<Models.Contact>().OwnsOne(x => x.Name, q => {
                 q.Property(z => z.FirstName).HasColumnName("first_name");
                 q.Property(z => z.LastName).HasColumnName("last_name");
