@@ -9,8 +9,8 @@ using contacts.Data;
 namespace contacts.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210410193713_contacts_1")]
-    partial class contacts_1
+    [Migration("20210411024059_contacts")]
+    partial class contacts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

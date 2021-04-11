@@ -13,9 +13,9 @@ namespace contacts.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name_FirstName = table.Column<string>(nullable: true),
-                    Name_LastName = table.Column<string>(nullable: true),
-                    Email_Address = table.Column<string>(nullable: true)
+                    first_name = table.Column<string>(nullable: true),
+                    last_name = table.Column<string>(nullable: true),
+                    email_address = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
