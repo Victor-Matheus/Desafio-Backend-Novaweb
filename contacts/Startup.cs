@@ -23,22 +23,10 @@ namespace contacts
         }
 
         public IConfiguration Configuration { get; }
-        // public static string Get()
-        // {
-        //     var uriString = ConfigurationManager.AppSettings["postgres://jgekejbi:0X1d1s95628fK2zEtRAP0ADDIhZnLZFU@tuffi.db.elephantsql.com:5432/jgekejbi"] ?? "postgres://localhost/mydb";
-        //     var uri = new Uri(uriString);
-        //     var db = uri.AbsolutePath.Trim('/');
-        //     var user = uri.UserInfo.Split(':')[0];
-        //     var passwd = uri.UserInfo.Split(':')[1];
-        //     var port = uri.Port > 0 ? uri.Port : 5432;
-        //     var connStr = string.Format("Server={0};Database={1};User Id={2};Password={3};Port={4}",
-        //         uri.Host, db, user, passwd, port);
-        //     return connStr;
-        // }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // var uriString = ConfigurationManager.AppSettings["postgres://jgekejbi:0X1d1s95628fK2zEtRAP0ADDIhZnLZFU@tuffi.db.elephantsql.com:5432/jgekejbi"] ?? "postgres://localhost/mydb";
+            // var uriString = ConfigurationManager.AppSettings["POSTGRES_URL"] ?? "postgres://localhost/";
             var uriString = "postgres://jgekejbi:0X1d1s95628fK2zEtRAP0ADDIhZnLZFU@tuffi.db.elephantsql.com:5432/jgekejbi";
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
@@ -47,7 +35,6 @@ namespace contacts
             var port = uri.Port > 0 ? uri.Port : 5432;
             var connStr = string.Format("Server={0};Database={1};User Id={2};Password={3};Port={4}",
                 uri.Host, db, user, passwd, port);
-            Console.WriteLine(connStr);
             
 
             services.AddDbContext<Data.DataContext>(opt => opt.UseNpgsql(connStr));

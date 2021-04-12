@@ -37,20 +37,18 @@ namespace contacts.Controllers
                             lastName = contact.Name.LastName
                         },
                         Email = contact.Email.Address,
-                        PhoneNumbers = contact.PhoneNumbers.Select(x => new {number = x.Number})
+                        PhoneNumbers = contact.PhoneNumbers.Select(x => new { number = x.Number })
                     };
 
                     objects.Add(_aux);
                 }
-                
+
                 return new ControllerResponse(
                     HttpStatusCode.OK,
                     true,
                     "",
                     objects
-
                 );
-
             }
             catch
             {
@@ -62,9 +60,6 @@ namespace contacts.Controllers
                 );
             }
         }
-
-        // [HttpGet]
-        // [Route("id:")]
 
         [HttpPost]
         [Route("")]
@@ -121,15 +116,69 @@ namespace contacts.Controllers
                     model
                 );
             }
-            else
+
+            return new ControllerResponse(
+                HttpStatusCode.InternalServerError,
+                false,
+                "Could not register contact",
+                model
+            );
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<ControllerResponse> DeleteContact(
+            [FromServices] Data.DataContext context,
+            int id
+        )
+        {
+            // Fail Fast Vslidate
+            if (id < 1) return new ControllerResponse(
+                 HttpStatusCode.BadRequest,
+                 false,
+                 "Invalid identifier.",
+                 ""
+             );
+
+            var contactToDelete = await context.Contacts.FindAsync(id);
+
+            if (contactToDelete == null) return new ControllerResponse(
+                 HttpStatusCode.NotFound,
+                 false,
+                 "Contact not found",
+                 ""
+             );
+
+            var res = await _contactRepository._deleteContact(context, contactToDelete);
+
+            var returnObject = new
+            {
+                id = contactToDelete.Id,
+                Name = new
+                {
+                    firstName = contactToDelete.Name.FirstName,
+                    lastName = contactToDelete.Name.LastName
+                },
+                Email = contactToDelete.Email.Address,
+                PhoneNumber = contactToDelete.PhoneNumbers.Select(x => new { number = x.Number })
+            };
+
+            if (res == EDbStatusReturn.DB_SAVED_OK)
             {
                 return new ControllerResponse(
-                    HttpStatusCode.InternalServerError,
-                    false,
-                    "Could not register contact",
-                    model
+                    HttpStatusCode.OK,
+                    true,
+                    "Contact deleted successfully.",
+                    returnObject
                 );
             }
+
+            return new ControllerResponse(
+                HttpStatusCode.InternalServerError,
+                false,
+                "Could not delete contact.",
+                returnObject
+            );
         }
     }
 }

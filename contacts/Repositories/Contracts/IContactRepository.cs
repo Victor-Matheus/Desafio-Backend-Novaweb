@@ -9,5 +9,6 @@ namespace contacts.Repositories.Contracts
     {
         Task<ActionResult<List<Models.Contact>>> _getAllContacts(Data.DataContext _context);
         Task<EDbStatusReturn> _createContact(Data.DataContext _context);
+        Task<EDbStatusReturn> _deleteContact(Data.DataContext _context, Models.Contact _contact);
     }
 }

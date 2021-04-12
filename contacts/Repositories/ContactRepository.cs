@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using contacts.Data;
 using contacts.Enums;
 using contacts.Models;
 using contacts.Repositories.Contracts;
@@ -19,6 +20,20 @@ namespace contacts.Repositories
         {
             try
             {
+                await _context.SaveChangesAsync();
+                return EDbStatusReturn.DB_SAVED_OK;
+            }
+            catch
+            {
+                return EDbStatusReturn.DB_GENERAL_EXCEPTION;
+            }
+        }
+
+        public async Task<EDbStatusReturn> _deleteContact(DataContext _context, Contact _contact)
+        {
+            try
+            {
+                _context.Contacts.Remove(_contact);
                 await _context.SaveChangesAsync();
                 return EDbStatusReturn.DB_SAVED_OK;
             }
