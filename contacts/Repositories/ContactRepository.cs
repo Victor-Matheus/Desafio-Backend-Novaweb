@@ -42,5 +42,11 @@ namespace contacts.Repositories
                 return EDbStatusReturn.DB_GENERAL_EXCEPTION;
             }
         }
+
+        public async Task<Contact> _getContactById(DataContext _context, int id)
+        {
+            var _contact = await _context.Contacts.FindAsync(id);
+            return _contact;
+        }
     }
 }

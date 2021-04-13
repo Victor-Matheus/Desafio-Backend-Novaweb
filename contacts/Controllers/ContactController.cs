@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using contacts.Enums;
 using contacts.Repositories;
+using contacts.Repositories.Contracts;
 using contacts.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace contacts.Controllers
     [Route("v1/contacts")]
     public class ContactController : ControllerBase
     {
-        private ContactRepository _contactRepository = new ContactRepository();
+        private readonly IContactRepository _contactRepository = new ContactRepository();
 
         [HttpGet]
         [Route("")]
@@ -24,7 +25,7 @@ namespace contacts.Controllers
             {
                 var contacts = await _contactRepository._getAllContacts(context);
 
-                List<dynamic> objects = new List<dynamic>();
+                List<dynamic> _returnObjects = new List<dynamic>();
 
                 foreach (var contact in contacts.Value)
                 {
@@ -40,14 +41,14 @@ namespace contacts.Controllers
                         PhoneNumbers = contact.PhoneNumbers.Select(x => new { number = x.Number })
                     };
 
-                    objects.Add(_aux);
+                    _returnObjects.Add(_aux);
                 }
 
                 return new ControllerResponse(
                     HttpStatusCode.OK,
                     true,
-                    "",
-                    objects
+                    "Success",
+                    _returnObjects
                 );
             }
             catch
@@ -132,7 +133,6 @@ namespace contacts.Controllers
             int id
         )
         {
-            // Fail Fast Vslidate
             if (id < 1) return new ControllerResponse(
                  HttpStatusCode.BadRequest,
                  false,
@@ -140,7 +140,7 @@ namespace contacts.Controllers
                  ""
              );
 
-            var contactToDelete = await context.Contacts.FindAsync(id);
+            var contactToDelete = await _contactRepository._getContactById(context, id);
 
             if (contactToDelete == null) return new ControllerResponse(
                  HttpStatusCode.NotFound,

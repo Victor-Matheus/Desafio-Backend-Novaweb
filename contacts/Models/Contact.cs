@@ -9,15 +9,9 @@ namespace contacts.Models
     {
         [Key]
         public int Id { get; set; }
-
-        /*
-            Use of Value Objects, avoiding excess of primitive types and
-            promoting scalability and testing.
-        */
         public Name Name { get; set; }
         public Email Email { get; set; }
         
-        // List<T> implementation: List -> IList -> ICollection -> IEnumerable
         public IList<PhoneNumber> PhoneNumbers { get; set; }
 
 

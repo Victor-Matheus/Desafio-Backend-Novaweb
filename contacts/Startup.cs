@@ -26,8 +26,7 @@ namespace contacts
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // var uriString = ConfigurationManager.AppSettings["POSTGRES_URL"] ?? "postgres://localhost/";
-            var uriString = "postgres://jgekejbi:0X1d1s95628fK2zEtRAP0ADDIhZnLZFU@tuffi.db.elephantsql.com:5432/jgekejbi";
+            var uriString = Environment.GetEnvironmentVariable("ASPNETCORE_ELEPHANTSQLURL");
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
             var user = uri.UserInfo.Split(':')[0];
