@@ -20,4 +20,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Dockerfile
           registry: docker.pkg.github.com
+          repository: victor-matheus/desafio-backend-novaweb/contact_api_image
           tag_with_ref: true
