@@ -26,7 +26,7 @@ namespace contacts
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var uriString = Environment.GetEnvironmentVariable("ASPNETCORE_ELEPHANTSQLURL");
+            var uriString = Environment.GetEnvironmentVariable("ASPNETCORE_ELEPHANTSQLURL") ?? Configuration.GetConnectionString("elephantsql_url");
             var uri = new Uri(uriString);
             var db = uri.AbsolutePath.Trim('/');
             var user = uri.UserInfo.Split(':')[0];

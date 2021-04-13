@@ -62,6 +62,65 @@ namespace Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ControllerResponse> GetContactById(
+            [FromServices] Data.DataContext context,
+            int id
+        )
+        {
+            try
+            {
+                if (id < 1) return new ControllerResponse(
+                     HttpStatusCode.BadRequest,
+                     false,
+                     "Invalid indentifier",
+                     ""
+                 );
+
+                var _returnContact = await _contactRepository._getContactById(context, id);
+
+                if (_returnContact != null)
+                {
+                    var _returnObject = new
+                    {
+                        id = _returnContact.Id,
+                        Name = new
+                        {
+                            firstName = _returnContact.Name.FirstName,
+                            lastName = _returnContact.Name.LastName
+                        },
+                        Email = _returnContact.Email.Address,
+                        PhoneNumbers = _returnContact.PhoneNumbers.Select(x => new { number = x.Number })
+                    };
+
+                    return new ControllerResponse(
+                        HttpStatusCode.OK,
+                        true,
+                        "Success",
+                        _returnObject
+                    );
+                }
+
+                return new ControllerResponse(
+                    HttpStatusCode.NotFound,
+                    false,
+                    "Contact not found",
+                    new { _id = id }
+                );
+            }
+            catch
+            {
+                return new ControllerResponse(
+                    HttpStatusCode.InternalServerError,
+                    false,
+                    "There was an error in the request",
+                    ""
+                );
+            }
+
+        }
+
         [HttpPost]
         [Route("")]
         public async Task<ControllerResponse> CreateContact(
@@ -108,13 +167,25 @@ namespace Controllers
 
             var res = await _contactRepository._createContact(context);
 
+            var _returnObject = new
+            {
+                id = contact.Id,
+                Name = new
+                {
+                    firstName = contact.Name.FirstName,
+                    lastName = contact.Name.LastName
+                },
+                Email = contact.Email.Address,
+                PhoneNumbers = contact.PhoneNumbers.Select(x => new { number = x.Number })
+            };
+
             if (res == EDbStatusReturn.DB_SAVED_OK)
             {
                 return new ControllerResponse(
                     HttpStatusCode.OK,
                     true,
                     "Contact successfully registered",
-                    model
+                    _returnObject
                 );
             }
 
@@ -122,7 +193,7 @@ namespace Controllers
                 HttpStatusCode.InternalServerError,
                 false,
                 "Could not register contact",
-                model
+                _returnObject
             );
         }
 

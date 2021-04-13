@@ -1507,11 +1507,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/victor/Documents/novaweb_codes/desafio_nw/Desafio-Backend-Novaweb/contacts/contacts.csproj",
+      "projectUniqueName": "/home/victor/Documents/novaweb_codes/desafio_nw/Desafio-Backend-Novaweb/contacts.csproj",
       "projectName": "contacts",
-      "projectPath": "/home/victor/Documents/novaweb_codes/desafio_nw/Desafio-Backend-Novaweb/contacts/contacts.csproj",
+      "projectPath": "/home/victor/Documents/novaweb_codes/desafio_nw/Desafio-Backend-Novaweb/contacts.csproj",
       "packagesPath": "/home/victor/.nuget/packages/",
-      "outputPath": "/home/victor/Documents/novaweb_codes/desafio_nw/Desafio-Backend-Novaweb/contacts/obj/",
+      "outputPath": "/home/victor/Documents/novaweb_codes/desafio_nw/Desafio-Backend-Novaweb/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/victor/.nuget/NuGet/NuGet.Config"
