@@ -2,11 +2,11 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 
 
-COPY *.csproj ./
+COPY *.csproj ./contacts
 RUN dotnet restore
 
 
-COPY . ./
+COPY . ./contacts
 RUN dotnet publish -c Release -o out
 
 
