@@ -251,5 +251,98 @@ namespace Controllers
                 returnObject
             );
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<ControllerResponse> UpdateContact(
+            [FromServices] Data.DataContext context,
+            [FromBody] Models.ContactRequestModel model,
+            int id
+        )
+        {
+            try
+            {
+                var _contact = await _contactRepository._getContactById(context, id);
+
+                if (_contact == null) return new ControllerResponse(
+                     HttpStatusCode.NotFound,
+                     false,
+                     "Contact not found",
+                     ""
+                 );
+
+                IList<dynamic> notifications = new List<dynamic>();
+                List<PhoneNumber> _numbers = new List<PhoneNumber>();
+                var _name = new Name(model.FirstName ?? _contact.Name.FirstName, model.LastName ?? _contact.Name.LastName);
+                var _email = new Email(model.EmailAddress ?? _contact.Email.Address);
+
+                if (model.PhoneNumbers != null)
+                {
+                    foreach (var num in model.PhoneNumbers)
+                    {
+                        var elem = new ValueObjects.PhoneNumber(num);
+
+                        if (elem.Invalid) return new ControllerResponse(
+                         HttpStatusCode.BadRequest,
+                         false,
+                         "Invalid phone number",
+                         model
+                     );
+                        _numbers.Add(elem);
+                    }
+                }
+
+                notifications.Add(_name.Notifications.Select(x => x.Message));
+                notifications.Add(_email.Notifications.Select(x => x.Message));
+
+                if (_name.Invalid || _email.Invalid) return new ControllerResponse(
+                     HttpStatusCode.BadRequest,
+                     false,
+                     "Invalid name or email",
+                     notifications
+                 );
+
+                _contact.Name = _name;
+                _contact.Email = _email;
+                _contact.PhoneNumbers = _numbers;
+
+                var _returnObject = new
+                {
+                    id = _contact.Id,
+                    Name = new
+                    {
+                        firstName = _contact.Name.FirstName,
+                        lastName = _contact.Name.LastName
+                    },
+                    Email = _contact.Email.Address,
+                    PhoneNumbers = _contact.PhoneNumbers.Select(x => new { number = x.Number })
+                };
+
+                var dbResponse = _contactRepository.Update(context, _contact);
+
+                if (dbResponse == EDbStatusReturn.DB_SAVED_OK) return new ControllerResponse(
+                     HttpStatusCode.OK,
+                     true,
+                     "Contact updated successfully",
+                     _returnObject
+                 );
+
+                return new ControllerResponse(
+                    HttpStatusCode.InternalServerError,
+                    false,
+                    "Could not update contact",
+                    model
+                );
+            }
+            catch
+            {
+                return new ControllerResponse(
+                    HttpStatusCode.InternalServerError,
+                    false,
+                    "There was an error in the request",
+                    ""
+                );
+            }
+        }
     }
 }

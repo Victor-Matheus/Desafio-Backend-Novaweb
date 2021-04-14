@@ -11,5 +11,7 @@ namespace Repositories.Contracts
         Task<Models.Contact> _getContactById(Data.DataContext _context,int id);
         Task<EDbStatusReturn> _createContact(Data.DataContext _context);
         Task<EDbStatusReturn> _deleteContact(Data.DataContext _context, Models.Contact _contact);
+
+        EDbStatusReturn Update(Data.DataContext _context, Models.Contact _contact);
     }
 }

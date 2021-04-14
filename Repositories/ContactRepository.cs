@@ -48,5 +48,17 @@ namespace Repositories
             var _contact = await _context.Contacts.FindAsync(id);
             return _contact;
         }
+
+        public EDbStatusReturn Update(DataContext _context, Contact _contact)
+        {
+            try{
+                _context.Entry(_contact).State = EntityState.Modified;
+                _context.SaveChanges();
+                return EDbStatusReturn.DB_SAVED_OK;
+            }catch 
+            {
+               return EDbStatusReturn.DB_GENERAL_EXCEPTION;
+            }
+        }
     }
 }
