@@ -1,3 +1,6 @@
+# Insomnia Collection
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Contact%20API&uri=https%3A%2F%2Fraw.githubusercontent.com%2FVictor-Matheus%2FDesafio-Backend-Novaweb%2Fmain%2Fcollection.json)
+
 # Desafio Backend Novaweb
 
 Este desafio é parte do processo seletivo para a vaga "Desenvolvedor backend" da empresa Novaweb. As habilidades esperadas de um desenvolvedor backend são:
