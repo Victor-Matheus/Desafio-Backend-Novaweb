@@ -272,7 +272,7 @@ namespace Controllers
                  );
 
                 IList<dynamic> notifications = new List<dynamic>();
-                List<PhoneNumber> _numbers = new List<PhoneNumber>();
+                IList<PhoneNumber> _numbers = new List<PhoneNumber>();
                 var _name = new Name(model.FirstName ?? _contact.Name.FirstName, model.LastName ?? _contact.Name.LastName);
                 var _email = new Email(model.EmailAddress ?? _contact.Email.Address);
 
@@ -304,7 +304,7 @@ namespace Controllers
 
                 _contact.Name = _name;
                 _contact.Email = _email;
-                _contact.PhoneNumbers = _numbers;
+                _contact.PhoneNumbers = _numbers.Any() ? _numbers : _contact.PhoneNumbers;
 
                 var _returnObject = new
                 {
