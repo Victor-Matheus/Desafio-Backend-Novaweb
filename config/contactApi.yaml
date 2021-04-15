@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contactapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: contactapi
+  template: 
+    metadata: 
+      labels:
+        app: contactapi
+    spec:
+      containers:
+      - name: contactapi-container
+        image: docker.pkg.github.com/victor-matheus/desafio-backend-novaweb/contact_api_image:main
+        ports: 
+        - containerPort: 80

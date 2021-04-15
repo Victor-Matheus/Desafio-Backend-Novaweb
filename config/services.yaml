@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata: 
+  name: contactapi-service
+spec: 
+  selector:
+    app: contact_api
+  ports:
+  - protocol: TCP
+    port: 80
+  type: LoadBalancer
